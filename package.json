@@ -1,0 +1,40 @@
+{
+  "name": "supengtrading",
+  "version": "1.0.0",
+  "description": "npm init npm install --save express passport dotenv nodemailer redis mysql2 jsonwebtoken npm install nodemon --save-dev",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kdsanskar07/EcommerceAppBackend.git"
+  },
+  "author": "kuetedonald",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kdsanskar07/EcommerceAppBackend/issues"
+  },
+  "homepage": "https://github.com/kdsanskar07/EcommerceAppBackend#readme",
+  "dependencies": {
+    "passport-jwt": "^4.0.0"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.0",
+    "nodemailer": "^6.6.3",
+    "nodemon": "^2.0.12",
+    "npm": "^7.21.0",
+    "passport": "^0.4.1",
+    "redis": "^3.1.2"
+  },
+  "keywords": [
+    "ecommerce"
+  ]
+}
