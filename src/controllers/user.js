@@ -75,7 +75,7 @@ const register = async (req,res)=>{
     return res.status(200).json({success:true,msg:'OTP has been sent.'});
     }catch(error){
         console.log(error);
-       return res.status(400).json({success:false,msg:'Please retry.'});
+       return res.status(400).json({success:false,msg:'Please retry.'+ error});
     }
 };
 
