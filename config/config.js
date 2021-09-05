@@ -20,6 +20,8 @@ module.exports = {
       "private_key": PRIVATE_KEY,
       "senderEmail": process.env.SENDER_EMAIL,
       "senderPassword": process.env.SENDER_PASSWORD,
+      "REDIS_HOST": process.env.REDIS_HOST,
+      "REDIS_PORT": process.env.REDIS_PORT,
     },
     // "test": {
     //   "username": "root",
