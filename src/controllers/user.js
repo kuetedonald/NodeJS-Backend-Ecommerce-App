@@ -2,10 +2,11 @@ const User = require('../../src/models/user.js');
 const utils = require('../../lib/utils.js');
 const redis = require('redis');
 const mailSender = require('../../lib/mail.js');
+const client = require("../../config/redis.js");
 
 const { promisify } = require("util");
 
-const redisClient = redis.createClient();
+//const redisClient = redis.createClient();
 const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
 const login = (req,res)=>{
@@ -28,7 +29,7 @@ const login = (req,res)=>{
 
 const resendOTP = async (req,res)=>{
     const key = JSON.stringify({email:req.body.email,password:req.body.password});
-    const getOtp = promisify(redisClient.get).bind(redisClient);
+    const getOtp = promisify(client.get).bind(client);
     var result = await getOtp(key);
     if(result){
         try{
@@ -42,8 +43,10 @@ const resendOTP = async (req,res)=>{
         let otp = Math.floor(100000 + Math.random() * 900000).toString();
         const key = JSON.stringify({email:req.body.email,password:req.body.password});
         const val = otp;
-        redisClient.set(key,val);
-        redisClient.expire(otp,86400); //24-hrs
+        // redisClient.set(key,val);
+        // redisClient.expire(otp,86400); //24-hrs
+        client.set(key,val);
+        client.expire(otp,86400); //24-hrs
         try{
             const response = await mailSender.sendEmail(req.body.email,otp);
             return res.status(200).json({success:true,msg:'OTP has been sent.'});
@@ -57,26 +60,28 @@ const resendOTP = async (req,res)=>{
 const register = async (req,res)=>{
     console.log(req.body.email);
     try{
-		const response = await User.findUserByEmail(req.body.email);
-		if(response.noOfUserFound){
-			return res.status(400).json({success:false,msg:'Email already exist.'});
-		}
-		let otp = Math.floor(100000 + Math.random() * 900000).toString();
-		const key = JSON.stringify({email:req.body.email,password:req.body.password});
-		const val = otp;
-		redisClient.set(key,val);
-		redisClient.expire(otp,86400); //24-hrs
-		const responsemail = await mailSender.sendEmail(req.body.email,otp);
-		return res.status(200).json({success:true,msg:'OTP has been sent.'});
+    const response = await User.findUserByEmail(req.body.email);
+    if(response.noOfUserFound){
+        return res.status(400).json({success:false,msg:'Email already exist.'});
+    }
+    let otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const key = JSON.stringify({email:req.body.email,password:req.body.password});
+    const val = otp;
+    // redisClient.set(key,val);
+    // redisClient.expire(otp,86400); //24-hrs
+    client.set(key,val);
+    client.expire(otp,86400); //24-hrs
+    const responsemail = await mailSender.sendEmail(req.body.email,otp);
+    return res.status(200).json({success:true,msg:'OTP has been sent.'});
     }catch(error){
         console.log(error);
-       return res.status(400).json({success:false,msg:'Please retry.' + error});
+       return res.status(400).json({success:false,msg:'Please retry.'+ error});
     }
 };
 
 const verifyUser = async (req,res)=>{
     const key = JSON.stringify({email:req.body.email,password:req.body.password});
-    const getAsync = promisify(redisClient.get).bind(redisClient);
+    const getAsync = promisify(client.get).bind(client);
     var result = await getAsync(key);
     if(result){
         // console.log(req.body.otp);
@@ -115,8 +120,10 @@ const forgetPassword = async(req,res) =>{
     const key = req.body.email;
     console.log('key1: ',key);
     const val = otp;
-    redisClient.set(key,val);
-    redisClient.expire(otp,86400); //24-hrs
+    client.set(key,val);
+    client.expire(otp,86400); //24-hrs
+    // redisClient.set(key,val);
+    // redisClient.expire(otp,86400); //24-hrs
     try{
         const response = await mailSender.sendEmail(req.body.email,otp);
         return res.status(200).json({success:true,msg:'OTP has been sent.'});
@@ -127,7 +134,7 @@ const forgetPassword = async(req,res) =>{
 
 const verifyOtp = async(req,res) => {
     const key = req.body.email;
-    const getAsync = promisify(redisClient.get).bind(redisClient);
+    const getAsync = promisify(client.get).bind(client);
     try{
         var result = await getAsync(key);
         if(result){
@@ -176,7 +183,7 @@ const resetPassword = async(req,res) => {
 
 const resendOTPReset = async (req,res)=>{
     const key = req.body.email;
-    const getOtp = promisify(redisClient.get).bind(redisClient);
+    const getOtp = promisify(client.get).bind(client);
     var result = await getOtp(key);
     if(result){
         try{
@@ -189,8 +196,10 @@ const resendOTPReset = async (req,res)=>{
         let otp = Math.floor(100000 + Math.random() * 900000).toString();
         const key = req.body.email;
         const val = otp;
-        redisClient.set(key,val);
-        redisClient.expire(otp,86400); //24-hrs
+        client.set(key,val);
+        client.expire(otp,86400); //24-hrs
+        // redisClient.set(key,val);
+        // redisClient.expire(otp,86400); //24-hrs
         try{
             const response = await mailSender.sendEmail(req.body.email,otp);
             return res.status(200).json({success:true,msg:'OTP has been sent.'});
