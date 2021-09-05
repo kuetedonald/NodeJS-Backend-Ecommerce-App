@@ -22,6 +22,8 @@ module.exports = {
       "senderPassword": process.env.SENDER_PASSWORD,
       "REDIS_HOST": process.env.REDIS_HOST,
       "REDIS_PORT": process.env.REDIS_PORT,
+      "senderEmail": process.env.senderEmail,
+      "senderPassword": process.env.senderPassword,
     },
     // "test": {
     //   "username": "root",
