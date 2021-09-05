@@ -7,6 +7,7 @@ const redis = require('redis');
 const mailSender = require('../../lib/mail.js');
 const utils = require('../../lib/utils.js');
 const dbConnection = require("../../config/database.js");
+const client = require("../../config/redis.js");
 
 
 const getCartDetails = async(req,res) =>{
@@ -121,14 +122,16 @@ const cancelStoreOrders = async(req,res)=>{
 
 const readyStoreOrders = async(req,res)=>{
     try{
-        const redisClient = redis.createClient();
+        // const redisClient = redis.createClient();
         const userId = await (await Order.getOrderDetailsByOrderId(null,req.body.orderId)).data.userid;
         const userEmail = await (await User.findUserById(userId)).user.email;
         let otp = Math.floor(100000 + Math.random() * 900000).toString();
         const key = req.body.orderId;
         const val = otp;
-        redisClient.set(key,val);
-        redisClient.expire(otp,86400);
+        // redisClient.set(key,val);
+        // redisClient.expire(otp,86400);
+        client.set(key,val);
+        client.expire(otp,86400);
         const responsemail = await mailSender.sendEmail(userEmail,otp);
         const response = await Order.updateOrderStatus(null,req.body.orderId,"3",null,req.body.pickupTime);
         return res.status(200).json({success:true,msg:'order ready to be picked'}); 
@@ -141,9 +144,10 @@ const readyStoreOrders = async(req,res)=>{
 const pickStoreOrder = async(req,res)=>{
     try{
         const { promisify } = require("util");
-        const redisClient = redis.createClient();
+        // const redisClient = redis.createClient();
         const key = req.body.orderId.toString();
-        const getAsync = promisify(redisClient.get).bind(redisClient);
+        // const getAsync = promisify(redisClient.get).bind(redisClient);
+        const getAsync = promisify(client.get).bind(client);
         var result = await getAsync(key);
         if(result){
             if(req.body.otp===result){
