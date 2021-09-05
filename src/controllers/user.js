@@ -6,7 +6,7 @@ const client = require("../../config/redis.js");
 
 const { promisify } = require("util");
 
-// const redisClient = redis.createClient();
+//const redisClient = redis.createClient();
 const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
 const login = (req,res)=>{
@@ -70,13 +70,14 @@ const register = async (req,res)=>{
     const val = otp;
     // redisClient.set(key,val);
     // redisClient.expire(otp,86400); //24-hrs
+        console.log('client = ' + client);
     client.set(key,val);
     client.expire(otp,86400); //24-hrs
     const responsemail = await mailSender.sendEmail(req.body.email,otp);
     return res.status(200).json({success:true,msg:'OTP has been sent.'});
     }catch(error){
         console.log(error);
-       return res.status(400).json({success:false,msg:'Please retry.'});
+       return res.status(400).json({success:false,msg:'Please retry.'+ error});
     }
 };
 
