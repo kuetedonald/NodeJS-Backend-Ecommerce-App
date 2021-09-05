@@ -7,6 +7,7 @@ const dbConnection = async () => {
         user: Config.development.username,
         password:  Config.development.password,
         database: Config.development.database,
+        port: '3306',
         waitForConnections: true,
         connectionLimit:10,
         queueLimit:0
