@@ -13,7 +13,7 @@ module.exports = {
       "username": process.env.DB_USER,
       "password": process.env.DB_PASSWORD,
       "database": process.env.DB_NAME,
-      "host": process.env.HOST,
+      "host": process.env.DB_HOST,
       "dialect": process.env.DIALECT,
       "port": process.env.PORT,
       "public_key": PUBLIC_KEY,
