@@ -59,6 +59,7 @@ const resendOTP = async (req,res)=>{
 
 const register = async (req,res)=>{
     console.log(req.body.email);
+
     try{
     const response = await User.findUserByEmail(req.body.email);
     if(response.noOfUserFound){

@@ -23,5 +23,5 @@ app.listen(Config.development.port,err => {
     throw err;
     console.log('Cannot listen server');
   }
-  console.log("Server is running on port 3000.");
+  console.log("Server is running on port " + Config.development.port);
 });
