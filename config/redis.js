@@ -7,4 +7,4 @@ const client = () => {
         port: Config.development.REDIS_PORT
     });
 };
-module.exports = client;
+module.exports = client();
