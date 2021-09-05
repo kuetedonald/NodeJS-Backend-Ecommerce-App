@@ -69,8 +69,9 @@ const register = async (req,res)=>{
     const val = otp;
     // redisClient.set(key,val);
     // redisClient.expire(otp,86400); //24-hrs
-    //++client.set(key,val);
-    //++client.expire(otp,86400); //24-hrs
+        console.log('client = ' + client);
+    client.set(key,val);
+    client.expire(otp,86400); //24-hrs
     const responsemail = await mailSender.sendEmail(req.body.email,otp);
     return res.status(200).json({success:true,msg:'OTP has been sent.'});
     }catch(error){
